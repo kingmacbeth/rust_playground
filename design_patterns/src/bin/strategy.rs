@@ -40,6 +40,6 @@ fn main() {
 
     {
         let vending_machine = VendingMachine::new(CreditCardStrategy);
-        vending_machine.payment_strategy(String::from("Renato"), String::from("Marcilio"));
+        vending_machine.payment_strategy(String::from("Marcilio"), String::from("Renato"));
     }
 }
