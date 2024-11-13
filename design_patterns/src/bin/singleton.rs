@@ -6,7 +6,7 @@ enum Element {
     Water,
     Fire,
     Wind,
-    Earth,
+    Grass,
 }
 
 #[derive(Clone, Debug)]
@@ -67,7 +67,8 @@ struct PokeDex<'a> {
 }
 
 impl<'a> PokeDex<'a> {
-    /// Never instantiate a PokeDex with PokeDex::new(), use PokeDex::instance() instead.
+    /// Never instantiate a PokeDex with PokeDex::new(),
+    /// use PokeDex::instance() instead.
     unsafe fn new() -> Self {
         Self {
             data: OnceLock::new(),
