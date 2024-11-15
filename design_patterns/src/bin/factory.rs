@@ -37,6 +37,7 @@ impl<'a> PokemonFactory {
     }
 }
 
+#[allow(dead_code)]
 fn main() {
     use design_patterns_bench::pokemon::PokemonActions;
 

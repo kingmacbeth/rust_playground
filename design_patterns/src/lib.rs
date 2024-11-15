@@ -22,15 +22,15 @@ pub mod pokemon {
     }
 
     pub trait PokemonActions {
-        fn fight(&self) {}
-        fn heal(&self) {}
-        fn run(&self) {}
+        fn fight(&self);
+        fn heal(&self);
+        fn run(&self);
     }
 
     #[allow(dead_code)]
     #[derive(Clone, Debug)]
     pub struct Pokemon<'a> {
-        name: String,
+        pub name: String,
         pub element: PokemonType,
         category: Category,
         height: f32,
@@ -64,7 +64,7 @@ pub mod pokemon {
     impl<'a> PokemonActions for Pokemon<'a> {
         fn fight(&self) {
             let ability = self.abilities.clone();
-            println!("Pokemon attack with {}!", ability[0])
+            println!("Pokemon attacked with {}!", ability[0])
         }
 
         fn heal(&self) {

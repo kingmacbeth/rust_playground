@@ -78,6 +78,7 @@ impl PokemonStrategyContext {
     }
 }
 
+#[allow(dead_code)]
 fn main() {
     #[path = "factory.rs"]
     mod factory;

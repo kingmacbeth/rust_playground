@@ -45,6 +45,7 @@ impl<'a> PokeDex<'a> {
     }
 }
 
+#[allow(dead_code)]
 fn main() {
     #[path = "factory.rs"]
     mod factory;
