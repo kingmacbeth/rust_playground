@@ -1,45 +1,114 @@
-trait PaymentStrategy {
-    fn pay(&self, from: String, to: String);
+use design_patterns_bench::pokemon::{Pokemon, PokemonType};
+
+enum DamageEnum {
+    VeryEffective,
+    NotEffective,
+    Neutral,
 }
 
-struct CashStrategy;
-
-impl PaymentStrategy for CashStrategy {
-    fn pay(&self, from: String, to: String) {
-        println!("{} paid {} using cash.", from, to);
+impl DamageEnum {
+    fn description(&self) -> &str {
+        match self {
+            DamageEnum::VeryEffective => "Very effective this Pokemon type.",
+            DamageEnum::NotEffective => "Not effective against this Pokemon type.",
+            DamageEnum::Neutral => "Normal effectiveness against this Pokemon type.",
+        }
     }
 }
 
-struct CreditCardStrategy;
+trait DamageEvaluator {
+    fn calculate_dmg_against(&self, _pokemon: Pokemon);
+}
 
-impl PaymentStrategy for CreditCardStrategy {
-    fn pay(&self, from: String, to: String) {
-        println!("{} paid {} using credit card.", from, to);
+struct FireDamage;
+
+impl DamageEvaluator for FireDamage {
+    fn calculate_dmg_against(&self, pokemon: Pokemon) {
+        let element = pokemon.element;
+
+        match element {
+            PokemonType::Fire => println!("{}", DamageEnum::Neutral.description()),
+            PokemonType::Water => println!("{}", DamageEnum::NotEffective.description()),
+            PokemonType::Grass => println!("{}", DamageEnum::VeryEffective.description()),
+        }
     }
 }
 
-struct VendingMachine<T: PaymentStrategy> {
-    payment_strategy: T,
+struct WaterDamage;
+
+impl DamageEvaluator for WaterDamage {
+    fn calculate_dmg_against(&self, pokemon: Pokemon) {
+        let element = pokemon.element;
+
+        match element {
+            PokemonType::Fire => println!("{}", DamageEnum::VeryEffective.description()),
+            PokemonType::Water => println!("{}", DamageEnum::Neutral.description()),
+            PokemonType::Grass => println!("{}", DamageEnum::NotEffective.description()),
+        }
+    }
 }
 
-impl<T: PaymentStrategy> VendingMachine<T> {
-    pub fn new(payment_strategy: T) -> Self {
-        Self { payment_strategy }
+struct GrassDamage;
+
+impl DamageEvaluator for GrassDamage {
+    fn calculate_dmg_against(&self, pokemon: Pokemon) {
+        let element = pokemon.element;
+
+        match element {
+            PokemonType::Fire => println!("{}", DamageEnum::NotEffective.description()),
+            PokemonType::Water => println!("{}", DamageEnum::VeryEffective.description()),
+            PokemonType::Grass => println!("{}", DamageEnum::Neutral.description()),
+        }
+    }
+}
+
+struct PokemonStrategyContext {
+    evaluation_strategy: Box<dyn DamageEvaluator>,
+}
+
+impl PokemonStrategyContext {
+    fn new(evaluation_strategy: Box<dyn DamageEvaluator>) -> Self {
+        PokemonStrategyContext {
+            evaluation_strategy,
+        }
     }
 
-    pub fn payment_strategy(&self, from: String, to: String) {
-        self.payment_strategy.pay(from, to);
+    fn process_strategy(&self, pokemon: Pokemon) {
+        self.evaluation_strategy.calculate_dmg_against(pokemon)
     }
 }
 
 fn main() {
+    #[path = "factory.rs"]
+    mod factory;
+    use factory::PokemonFactory;
+
+    let charmander = PokemonFactory::new_pokemon(PokemonType::Fire);
+    let squirtle = PokemonFactory::new_pokemon(PokemonType::Water);
+    let bulbasaur = PokemonFactory::new_pokemon(PokemonType::Grass);
+
+    let fire_strategy = Box::new(FireDamage);
+    let water_strategy = Box::new(WaterDamage);
+    let grass_strategy = Box::new(GrassDamage);
+
     {
-        let vending_machine = VendingMachine::new(CashStrategy);
-        vending_machine.payment_strategy(String::from("Renato"), String::from("Marcilio"));
+        let strategy_context = PokemonStrategyContext::new(fire_strategy);
+        strategy_context.process_strategy(charmander.clone());
+        strategy_context.process_strategy(squirtle.clone());
+        strategy_context.process_strategy(bulbasaur.clone());
     }
 
     {
-        let vending_machine = VendingMachine::new(CreditCardStrategy);
-        vending_machine.payment_strategy(String::from("Marcilio"), String::from("Renato"));
+        let strategy_context = PokemonStrategyContext::new(water_strategy);
+        strategy_context.process_strategy(charmander.clone());
+        strategy_context.process_strategy(squirtle.clone());
+        strategy_context.process_strategy(bulbasaur.clone());
+    }
+
+    {
+        let strategy_context = PokemonStrategyContext::new(grass_strategy);
+        strategy_context.process_strategy(charmander.clone());
+        strategy_context.process_strategy(squirtle.clone());
+        strategy_context.process_strategy(bulbasaur.clone());
     }
 }

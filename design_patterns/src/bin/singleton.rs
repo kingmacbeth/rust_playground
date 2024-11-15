@@ -56,7 +56,7 @@ fn main() {
         pokedex.push(charmander.clone());
 
         let pokemons_in_pokedex = pokedex.get_pokemons();
-        println!("{pokemons_in_pokedex:?}");
+        println!("{:?}", pokemons_in_pokedex);
     }
     {
         let squirtle = PokemonFactory::new_pokemon(PokemonType::Water);
@@ -64,7 +64,7 @@ fn main() {
         pokedex_2.push(squirtle.clone());
 
         let pokemons_in_pokedex_2 = pokedex_2.get_pokemons();
-        println!("{pokemons_in_pokedex_2:?}");
+        println!("{:?}", pokemons_in_pokedex_2);
     }
 
     // Example error of instatiation without unsafe

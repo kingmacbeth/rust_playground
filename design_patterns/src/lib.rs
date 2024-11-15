@@ -31,7 +31,7 @@ pub mod pokemon {
     #[derive(Clone, Debug)]
     pub struct Pokemon<'a> {
         name: String,
-        element: PokemonType,
+        pub element: PokemonType,
         category: Category,
         height: f32,
         weight: f32,
