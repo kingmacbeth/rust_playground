@@ -69,6 +69,7 @@ fn main() {
     }
 
     // Example error of instatiation without unsafe
+    // Code will panic
     //let pokedex_3 = PokeDex::new();
     //let pokemons_in_pokedex_3 = pokedex_3.get_pokemons();
     //println!("{pokemons_in_pokedex_3:?}");
